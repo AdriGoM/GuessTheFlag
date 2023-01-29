@@ -8,6 +8,34 @@
 
 import SwiftUI
 
+//Custom view
+struct FlagImage: View {
+    var imageUrl: String
+
+    var body: some View {
+        Image(imageUrl)
+            .renderingMode(.original)
+            .clipShape(Circle())
+            .shadow(radius: 5)
+    }
+}
+
+
+//Custom view modifier
+struct Title: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(Color.black)
+    }
+}
+
+extension View {
+    func titleStyle() -> some View {
+        modifier(Title())
+    }
+}
+
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]
     @State private var correctAnswer = Int.random(in: 0...2)
@@ -17,7 +45,6 @@ struct ContentView: View {
     @State private var scoreTitle = ""
     @State private var currentScore = 0
     @State private var roundsPlayed = 0
-
     
     var body: some View {
         
@@ -40,8 +67,7 @@ struct ContentView: View {
                             .foregroundColor(.black)
                     
                         Text(countries[correctAnswer])
-                            .font(.largeTitle.weight(.semibold))
-                            .foregroundColor(.black)
+                            .titleStyle()
                     }
                     .frame(maxWidth: 300)
                     .padding(.vertical, 20)
@@ -52,10 +78,7 @@ struct ContentView: View {
                         Button {
                             flagTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Circle())
-                                .shadow(radius: 5)
+                            FlagImage(imageUrl: countries[number])
                         }
                         
                     }
